@@ -6,4 +6,9 @@
 
 ### This project makes the use of shields, breakout boards designed for arduino uno that can be stacked atop the arduino/
 ### Adafruit 16 Channel 12 bit PWM Servo Shield
-### Adafruit MusicMaker MP3 Shield
+### Adafruit MusicMaker MP3 Shield (contains an onboard stereo amplifier)
+
+### This project also uses a couple of other breakout boards
+
+### SX1509
+### Sparkfun capacative sensor
