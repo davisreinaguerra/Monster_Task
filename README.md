@@ -1,6 +1,6 @@
 # Monster-Box (Arduino Version 1)
 
-### The Monster Box was originally created by the Watabe-Uchida Lab by Iku Kimura and Brett Graham (Tsutsui-Kimura et al., 2022)
+### The Ptask is a behavioral arena heavily inspired by two existing behavioral tasks.  The Monster Box was originally created by the Watabe-Uchida Lab by Iku Kimura and Brett Graham (Tsutsui-Kimura et al., 2022).  The Two-armed bandit task for mice was originally created by Linda Wilbrecht.  
 
 ## Introduction
 
