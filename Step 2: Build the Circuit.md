@@ -10,5 +10,4 @@
 
 ### This project also uses a couple of other breakout boards
 
-### SX1509
-### Sparkfun capacative sensor
+### Sparkfun capacative sensors
