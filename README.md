@@ -13,6 +13,6 @@
 ### 2) The use of stackable arduino shields in the place of certain breakout boards that were not easily compatible with teensy.  
 ### 3) Two speakers on either side of the "monster" end of the cage, to allow for studies testing the effect of stereo audio.
 ### 4) Placement of a looming stimulus setup above the foraging end of the cage, so that the arena can serve dual purposes.
-### 5) Use of nose port entry to initiate a trial and nose port lick tubes.  
+### 5) Use of nose port entry to initiate a trial and nose port lick tubes, rather than floor mounted lick tubes.  
 
 ###List of Materials: https://docs.google.com/spreadsheets/d/1Lh0VRICVWp91Xj_S3SuwVECsTs8IGjlc8RMTBrCVKcQ/edit?usp=sharing
