@@ -2,6 +2,8 @@
 
 ### The Ptask is a behavioral arena heavily inspired by three existing behavioral tasks.  The Monster Box was originally created by the Watabe-Uchida Lab by Iku Kimura and Brett Graham (Tsutsui-Kimura et al., 2022).  The Two-armed bandit task for mice was originally created by Linda Wilbrecht (***).  The Looming Stimulus setup was originally designed by _________, and the use in this experiment was inspired by the work of Tiago Branco.  
 
+![Pterodactyl](pterodactyl.jpg)
+
 ## Introduction
 
 ### This is a detailed guide to building and operating the Ptask behavioral arena.  Whereas the Mosnter task was based on the Teensy platform, the Ptask uses an Arduino R3.  Although Teensy likely has certain advantages, Arduino is capable of running the same operations, and is more accessible to those who have limited engineering experience.  The Arduino Uno is one of the most popular development boards in production, and as such is usually easy to get a hold of (PJRC has been having backorder issues recently).
