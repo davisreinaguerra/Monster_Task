@@ -11,9 +11,11 @@ Table of Contents:
 1. Including Libraries
 2. Pin number assignments
 3. Global Timer
-4. Configuration Input Functions
-5. Debugging Functions
+4. Initialization Debug Functions
+5. Configuration Input Functions
 6. Trial Functions
+7. Void Setup
+8. Void loop
 ___________________________________________________________________________*/
 
 
@@ -23,6 +25,9 @@ ___________________________________________________________________________*/
 ___________________________________________________________________________*/
 
 #include <Wire.h> // required for I2C devices, delete if not using them
+#include <SPI.h> // Serial Peripheral Interface
+#include <Adafruit_VS1053.h> // Adafruit MusicMaker Library
+#include <SD.h> // SD card library
 
 
 
@@ -70,17 +75,57 @@ ___________________________________________________________________________*/
 
 /*
 
-4. Main Functions in the Order they are run
+4. Initialize Debugging Functions
+
+
+These functions are called by the first configuration function initialization_debug_routine
+
+___________________________________________________________________________*/
+
+void debug_door() 
+{
+  
+
+}
+
+void debug_breakbeams() 
+{
+  
+  
+}
+
+void debug_pterodactyl()
+{
+  // include sound and movement
+
+}
+
+void debug_touch() 
+{
+
+
+}
+
+void debug_solenoid()
+{
+  
+
+
+}
+
+/*
+
+5. Configuration Input Functions in the Order they are run
 
 ----> a. initialization_debug_routine();
 ----> b. trial_scheduler_and_configuration();
 ----> c. reward_delivery_prob_asker();
 ----> d. trial_number_asker();
 ----> e. intertrial_interval_asker();
-----> f. sound_filename_asker();
-----> g. volume_asker();
-----> h. report_config();
-----> i. start_experiment();
+----> f. monster_trial_or_not();
+----> g. sound_filename_asker();
+----> h. volume_asker();
+----> i. report_config();
 
 The first thing that happens when you power up the arduino is the Initialization Debugging Protocol
 This part of the code accepts user input to configure a trial
@@ -90,10 +135,9 @@ ___________________________________________________________________________*/
 void initialization_debug_routine() //function a.
 {
   
-  
-}
+// here make a big function that runs through each of the configuration debug functions one by one
 
-// here make a big function that runs through each of the devices one by one
+}
   
 
 void trial_scheduler_and_configuration() //function b.
@@ -143,14 +187,29 @@ int intertrial_interval_asker() //function e
    return i_milliseconds; 
 }
 
-// add sound_filename_asker(); //function f
-// add volume_asker(); //function g
+int monster_trial_or_not() // function f 
+{
+  Serial.println("Will this be a monster trial? (y/n)");
+  char c = Serial.read();
+  if c = "y" 
+  {
+    bool monster_trial = true;
+  } 
+  else
+  {
+    bool monster_trial = false;
+  }
+}
 
-void report_config(); // function h
+// add sound_filename_asker(); //function g
+// add volume_asker(); //function h
+
+void establish_config(); // function i
 {
     Serial.println("The reward delivery probability is: "); Serial.print(reward_delivery_probability_asker());
     Serial.println("The trial number is: "); Serial.print()
     Serial.println("The intertrial interval is: "); Serial.print(intertrial_interval_asker());
+    Serial.println("It is _____ that the monster will move"); // how to do this?
     //Serial.println("The sound type is: "); Serial.print(sound_filename_asker());
     //Serial.println("The volume of the sound is: "); Serial.print(volume_asker());
 
@@ -158,15 +217,18 @@ void report_config(); // function h
     char c = Serial.read();
     switch (c) 
     {
-      case 'y':
+      case 'y': // here, you want to define all of the variables as the output of the function only if the configuration is correct
         reward_delivery_probability = reward_delivery_probability_asker();
+        trial_number = trial_number_asker();
         intertrial_interval = intertrial_interval_asker();
-        sound = sound_asker();
+        sound_filename = sound_filename_asker();
         volume = volume asker();
+
+        ready_to_go(); // this moves on to the trial portion of the code
         break;
       case 'n':
-        Serial.println("Let's try that again");
-        trial_scheduler_and_configuration();
+        Serial.println("Let's start over");
+        trial_scheduler_and_configuration(); // start over
         break;
     }
 }   
@@ -174,14 +236,62 @@ void report_config(); // function h
 
 /*
 
-5. Debugging Functions
-
-
-
-This part of the code accepts user input to configure a trial
-A trial cannot start until this step has been achieved
+6. Trial Functions
 ___________________________________________________________________________*/
 
+void ready_to_go() 
+{
+
+// ready to start the experiment?  
+// If yes, move to next function: run_trials()
+
+}
+
+void run_trials() 
+{
+  for (int i = 1; i < trial_number; i++) {
+    start_trial_stopwatch();
+    open_door();
+    wait_for_broken_beam();
+    
+    }
+
+
+// Open door
+// initialize breakbeam breakbeam
+  
+}
+
+void start_trial_stopwatch() 
+{
+
+// this function starts a stopwatch at the beginning of the trial
+
+}
+
+void open_door() 
+{
+
+// this function opens the door at the beginning of the trial
+// this function calls wait_for_broken_beam()
+
+}
+
+void wait_for_broken_beam() 
+{
+
+// this function keeps the monster and sound at bay until the beam is broken
+
+}
+
+void is_there_a_monster() 
+{
+
+// this function has two portions:
+// if monster_trial = true, move the monster and make the sound at predefined intervals
+// if monster_trial = false, dont move anything and dont play the sound
+
+}
 
 /*
 
@@ -217,17 +327,6 @@ void setup() {
 
 
 
-//?? How do I make it so that the below functions are run only once when I press the reset button, and only one after the other
-
-initialization_debug_routine();
-trial_scheduler_and_configuration();
-reward_delivery_prob_asker();
-trial_number_asker();
-intertrial_interval_asker();
-sound_filename_asker();
-volume_asker();
-report_config();
-start_experiment();
 
 /*
 
@@ -239,6 +338,12 @@ ___________________________________________________________________________*/
 }
 
 void loop() {
+
+//?? How do I make it so that the below functions are run only once when I press the reset button, and only one after the other
+
+initialization_debug_routine();
+trial_scheduler_and_configuration();
+ready_to_go(); // this begins an exeriment
 
 
   // the NEST IR LED lights up when a beam is broken
