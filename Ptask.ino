@@ -67,6 +67,10 @@ ___________________________________________________________________________*/
 #define TRIAL_IN_PROGRESS_LED_READOUT
 #define LICK_PIN_LED_READOUT
 
+// audio SD card pins (may be teensy specific, look at musicMaker library
+#define SDCARD_CS_PIN    10
+#define SDCARD_MOSI_PIN  7
+#define SDCARD_SCK_PIN   14)
 
 
 
@@ -324,6 +328,18 @@ ___________________________________________________________________________*/
 void setup() {
 
   Serial.begin(9600);
+  
+  AudioMemory(8);
+
+  SPI.setMOSI(SDCARD_MOSI_PIN);
+  SPI.setSCK(SDCARD_SCK_PIN);
+  if (!(SD.begin(SDCARD_CS_PIN))) {
+    // stop here, but print a message repetitively
+    while (1) {
+      Serial.println("Unable to access the SD card");
+      delay(500);
+    }
+  }
 
   // IR Sensor INPUT Pins
   pinMode(NEST_IR_PIN, INPUT);
