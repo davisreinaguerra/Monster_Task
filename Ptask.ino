@@ -28,8 +28,15 @@ ___________________________________________________________________________*/
 #include <SPI.h> // Serial Peripheral Interface
 #include <Adafruit_VS1053.h> // Adafruit MusicMaker Library
 #include <SD.h> // SD card library
+#include <Audio.h>
+#include <SerialFlash.h>
 
-
+// the below is for the audio component of the code
+AudioPlaySdWav           playWav1;
+AudioOutputI2S           audioOutput;
+AudioConnection          patchCord1(playWav1, 0, audioOutput, 0);
+AudioConnection          patchCord2(playWav1, 1, audioOutput, 1);
+AudioControlSGTL5000     sgtl5000_1;
 
 /*
 
@@ -261,6 +268,22 @@ void run_trials()
 // initialize breakbeam breakbeam
   
 }
+
+
+/*
+void playFile(const char *filename)
+{
+  Serial.print("Playing file: ");
+  Serial.println(filename);
+  playWav1.play(filename);
+  delay(25);
+  while (playWav1.isPlaying()) 
+  {
+    // pause
+  }
+}
+*/
+
 
 void start_trial_stopwatch() 
 {
