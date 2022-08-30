@@ -28,15 +28,6 @@ ___________________________________________________________________________*/
 #include <SPI.h> // Serial Peripheral Interface
 #include <Adafruit_VS1053.h> // Adafruit MusicMaker Library
 #include <SD.h> // SD card library
-#include <Audio.h>
-#include <SerialFlash.h>
-
-// the below is for the audio component of the code
-AudioPlaySdWav           playWav1;
-AudioOutputI2S           audioOutput;
-AudioConnection          patchCord1(playWav1, 0, audioOutput, 0);
-AudioConnection          patchCord2(playWav1, 1, audioOutput, 1);
-AudioControlSGTL5000     sgtl5000_1;
 
 /*
 
@@ -67,11 +58,23 @@ ___________________________________________________________________________*/
 #define TRIAL_IN_PROGRESS_LED_READOUT
 #define LICK_PIN_LED_READOUT
 
-// audio SD card pins (may be teensy specific, look at musicMaker library
-#define SDCARD_CS_PIN    10
-#define SDCARD_MOSI_PIN  7
-#define SDCARD_SCK_PIN   14)
+// Audio stuff
 
+#define BREAKOUT_RESET  9      // VS1053 reset pin (output)
+#define BREAKOUT_CS     10     // VS1053 chip select pin (output)
+#define BREAKOUT_DCS    8      // VS1053 Data/command select pin (output)
+#define SHIELD_RESET  -1      // VS1053 reset pin (unused!)
+#define SHIELD_CS     7      // VS1053 chip select pin (output)
+#define SHIELD_DCS    6      // VS1053 Data/command select pin (output)
+#define CARDCS 4     // Card chip select pin
+#define DREQ 3 
+
+Adafruit_VS1053_FilePlayer musicPlayer = 
+  Adafruit_VS1053_FilePlayer(SHIELD_RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);
+
+monster_sound = "/godzilla.wav"
+pink_sound = "/pink.wav"
+no_sound = "/.wav"
 
 
 /*
@@ -80,7 +83,14 @@ ___________________________________________________________________________*/
 ___________________________________________________________________________*/
 
 
-// figure out how to do the elapsed millis thing here
+// any time you store a millisecond time point into a variable, you must initialize that variable as an unsigned long
+unsigned long experiment_start_stopwatch;
+unsigned long trial_start_stopwatch;
+unsigned long latency_to_trigger;
+unsigned long trial_duration;
+unsigned long escape_duration;
+unsigned long latency_to_lick;
+
 
 
 
@@ -147,6 +157,7 @@ void initialization_debug_routine() //function a.
 {
   
 // here make a big function that runs through each of the configuration debug functions one by one
+// end this block by calling to the trial_scheduler_and_configuration function
 
 }
   
@@ -212,10 +223,30 @@ int monster_trial_or_not() // function f
   }
 }
 
-// add sound_filename_asker(); //function g
+
+void experiment_filename_asker() // function g
+{
+    Serial.println("What sound would you like to play? (m = monster, p = pink noise, n = no sound)")
+    char c = Serial.read();
+    switch (c) 
+    {
+      case 'm': ]
+        experiment_sound = monster_sound;
+        break;
+      case 'p': 
+        experiment_sound = pink_sound;
+        break;
+      case 'n':
+        experiment_sound = no_sound;
+        break;
+    }
+
+
+}
+
 // add volume_asker(); //function h
 
-void establish_config(); // function i
+void establish_config() // function i
 {
     Serial.println("The reward delivery probability is: "); Serial.print(reward_delivery_probability_asker());
     Serial.println("The trial number is: "); Serial.print()
@@ -232,7 +263,7 @@ void establish_config(); // function i
         reward_delivery_probability = reward_delivery_probability_asker();
         trial_number = trial_number_asker();
         intertrial_interval = intertrial_interval_asker();
-        sound_filename = sound_filename_asker();
+        expeirment_filename = experiment_filename_asker();
         volume = volume asker();
 
         ready_to_go(); // this moves on to the trial portion of the code
@@ -258,65 +289,90 @@ void ready_to_go()
 
 }
 
-void run_trials() 
+void run_trials() // have to add escape routes for if trial fails
 {
+  experiment_start_stopwatch = millis();
   for (int i = 1; i < trial_number; i++) {
-    start_trial_stopwatch();
+    trial_start_stopwatch = millis() - experiment_start_stopwatch;
+    Serial.print("Trial "); Serial.print(trial_number);
+    
     open_door();
-    wait_for_broken_beam();
+    
+    while (wait_for_broken_beam()); // pause until wait_for_broken_beam returns 1
+    latency_to_trigger = millis() - trial_start_stopwatch;
+
+    is_there_a_monster();
+
+    while (port_not_licked()); // wait until the port is licked
+    latency_to_lick = millis() - latency_to_trigger;
+
+    get_water();
+
+    while (wait_for_return()); // wait until mouse breaks nest pin
+    escape_duration = millis() - latency to lick;
+
+    total_trial_duration = millis() - trial_start_stopwatch;
+
+    // reporting on the trial
+    Serial.print("The latency to trigger was "); Serial.print(latency_to_trigger); Serial.println(" milliseconds");
+    Serial.print("The latency to lick was "); Serial.print(latency_to_lick); Serial.println(" milliseconds");
+    Serial.print("The escape duration was"); Serial.print(escape_duration); Serial.println("milliseconds");
+    Serial.print("The Total trial duration was"); Serial.print(total_trial_duration); Serial.println("milliseconds");
+
+    delay(intertrial_interval);
     
     }
-
-
-// Open door
-// initialize breakbeam breakbeam
-  
-}
-
-
-/*
-void playFile(const char *filename)
-{
-  Serial.print("Playing file: ");
-  Serial.println(filename);
-  playWav1.play(filename);
-  delay(25);
-  while (playWav1.isPlaying()) 
-  {
-    // pause
-  }
-}
-*/
-
-
-void start_trial_stopwatch() 
-{
-
-// this function starts a stopwatch at the beginning of the trial
 
 }
 
 void open_door() 
 {
-
+  // servo.write(open)
 // this function opens the door at the beginning of the trial
 // this function calls wait_for_broken_beam()
 
 }
 
-void wait_for_broken_beam() 
-{
-
 // this function keeps the monster and sound at bay until the beam is broken
-
+int wait_for_broken_beam() 
+{
+  // time out after a preset amount of time
+  while (TRIGGER_IR_PIN == HIGH) {return 0}; 
+  return 1;
 }
 
 void is_there_a_monster() 
 {
+  if (monster_trial == true) 
+  {
+   digitalWrite(monster, move);
+   musicPlayer.playFullFile(experiment_sound);
+  }
+  if monster_trial == false {}
+}
 
-// this function has two portions:
-// if monster_trial = true, move the monster and make the sound at predefined intervals
-// if monster_trial = false, dont move anything and dont play the sound
+int port_not_licked() 
+{
+  // return 1 the moment the port is licked
+}
+
+int get_water() 
+{
+  // if cap sensor is touched 5 times, deliver this much water by pulsing open the solonoid  
+  while (port_not_licked()) {return 0};
+  digitalWrite(give the mf some water);
+}
+
+int wait_for_return()
+{
+  while (NEST_IR_PIN == HIGH) {return 0};
+  
+
+}
+
+int return_to_nest() 
+{
+  
 
 }
 
@@ -328,18 +384,6 @@ ___________________________________________________________________________*/
 void setup() {
 
   Serial.begin(9600);
-  
-  AudioMemory(8);
-
-  SPI.setMOSI(SDCARD_MOSI_PIN);
-  SPI.setSCK(SDCARD_SCK_PIN);
-  if (!(SD.begin(SDCARD_CS_PIN))) {
-    // stop here, but print a message repetitively
-    while (1) {
-      Serial.println("Unable to access the SD card");
-      delay(500);
-    }
-  }
 
   // IR Sensor INPUT Pins
   pinMode(NEST_IR_PIN, INPUT);
