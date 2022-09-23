@@ -1,6 +1,6 @@
 # The Ptask
 
-### The Ptask is a behavioral arena heavily inspired by three existing behavioral tasks.  The Monster Box was originally created by the Watabe-Uchida Lab by Iku Kimura and Brett Graham (Tsutsui-Kimura et al., 2022).  The Two-armed bandit task for mice was originally created by Linda Wilbrecht (***).  The Looming Stimulus setup was originally designed by _________, and the use in this experiment was inspired by the work of Tiago Branco.  
+### The Ptask is a behavioral arena heavily inspired by three existing behavioral tasks.  The Monster Box was originally created by the Watabe-Uchida Lab by Iku Kimura and Brett Graham (Tsutsui-Kimura et al., 2022).  The Two-armed bandit task for mice was originally created by Linda Wilbrecht (***).  The Looming Stimulus setup was originally designed by Yilmaz and Meister (2013), and the use in this experiment was inspired by work from the lab of Tiago Branco (Lenzi et al., 2022).  
 
 ![Pterodactyl](pictures/Pterodactyl.jpeg)
 
