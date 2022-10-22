@@ -1,18 +1,11 @@
 # Threat/Reward Conflict Apparatus
 
-### Escape behaviors in mice offer a robust behavioral model for the assessment of threat/reward conflict.  
+Escape behaviors in mice offer a robust behavioral system in which to study the neuronal computation of decision related to acquiring rewards while maintaining estimates of potential threats.  Escape behaviors can be subdivided into four phases: 1) Threat Detection, 2) Excape Initiation, 3) Escape  each underlied by distinct activity patterns of overlapping but combinatorially distinct populations of neurons.  
 
-The Ptask is a behavioral arena heavily inspired by three existing behavioral tasks.  The Monster Box was originally created by the Watabe-Uchida Lab by Iku Kimura and Brett Graham (Tsutsui-Kimura et al., 2022).  The Two-armed bandit task for mice was originally created by Linda Wilbrecht (***).  The Looming Stimulus setup was originally designed by Yilmaz and Meister (2013), and the use in this experiment was inspired by work from the lab of Tiago Branco (Lenzi et al., 2022).  
+It has been hypothesized that the Periaqueductal Grey contains neurons which compute threat probability in an all-or-nothing fasion thanks to inputs from the medial superior colliculus, which is thought to constitute the fferent branch of a visually guided reflex arc.  That said, the computation of threat probability by PAG neurons is likely amenable to top down regulation, as escape behaviors can be suppressed in animals with prior exposure to innately aversive visual stimuli such as a looming disk (Lenzi et al., 2022).  The activity of direct spiny projection neurons (dSPN's) in the tail of the striatum (TS) have recently been shown to be directly proportional to the probability of escape behaviors (Menegas et al., 2018 and Tsutsui-Kimura et al., 2022).  Conversely, the activity of indirect spiny projection neurons (iSPN's) in the same reigon have been shown to be indirectly proportional to the probability of escape behaviors, supposedly acting to suppress escape behaviors.  This striatal region might therefore serve as an upstream source of signals providing top-down suppression of escape.
 
-![Pterodactyl](pictures/Pterodactyl.jpeg)
+The expression of escape behavior is largely dependent on the identity of he threatening stimulus.  Additionally, sound plays a key role in predator avoidance behaviors and the extent to which auditory and stimuli are related in the formation of threat predictions has largely gone unexplored.  The need has arisen for a flexible threat/reward conflict apparatus in which the basic structure of the task can be maintained while the identity of the visual and auditory threats can be easily switched.
 
-## Introduction
+This project is driven largely by the work of Iku Kimura and Brett Graham in the creation of the monster task, which uses infrared sensors and servos interfaced via a microcontroller to control the presentation of rewards and threats resembling a potential predator to a foraging mouse.  
 
-### This is a detailed guide to building and operating the Threat/Reward Conflict behavioral arena.  Whereas the Mosnter task was based on the Teensy platform, the Threat/Reward Conflict Task uses an Arduino R3.  Although Teensy likely has certain advantages, Arduino is capable of running the same operations, and is more accessible to those who have limited engineering experience.  The Arduino Uno is one of the most popular development boards in production, and as such is usually easy to get a hold of (PJRC has been having backorder issues recently).
 
-### Other changes from the Monster Task include: 
-### - lighter "monster" in the form of a foam pterodactyl toy allowing for the use of a smaller arduino compatible motor instead of the large and difficult to program teknic motor required to move the heavy dinosaurs of the past.  
-### - Two speakers on either side of the "monster" end of the cage, to allow for studies testing the effect of stereo audio.
-### - Flexibility in the Identity of the Predator
-
-### Bill of Materials: https://docs.google.com/spreadsheets/d/1Lh0VRICVWp91Xj_S3SuwVECsTs8IGjlc8RMTBrCVKcQ/edit?usp=sharing
