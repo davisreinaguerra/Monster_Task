@@ -1,13 +1,16 @@
-#include <"alignment.h">
-#include <"Arduino.h">
+#include "alignment.h"
+#include "Arduino.h"
+
 
 alignment::alignment(int pin) {
   pinMode(pin, OUTPUT);
   _pin = pin;
 }
 
-void alignment::send(x) {
+void alignment::align_onset() {
   digitalWrite(_pin, HIGH);
-  delay(x);
+}
+
+void alignment::align_offset() {
   digitalWrite(_pin, LOW);
 }

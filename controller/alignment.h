@@ -6,9 +6,10 @@
 class alignment {
   public:
     alignment(int pin); // constructor
-    void send(); 
+    void align_onset();
+    void align_offset(); 
   private:
     int _pin;
-}
+};
 
 #endif
