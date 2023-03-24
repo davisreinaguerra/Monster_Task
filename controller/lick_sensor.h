@@ -9,7 +9,6 @@ class lick_sensor {
     bool is_licked();
   private:
     int _pin;
-}
-
+};
 
 #endif

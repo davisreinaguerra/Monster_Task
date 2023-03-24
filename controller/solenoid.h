@@ -6,9 +6,10 @@
 class solenoid {
   public:
     solenoid(int pin); // Constructor
-    void pulse_valve();
+    void valve_off();
+    void pulse_valve(int reward_duration);
   private:
     int _pin;
-}
+};
 
 #endif
