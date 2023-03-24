@@ -1,14 +1,15 @@
 #define move_pin 10 // white wire
 #define enable_pin 7 // blue wire
-#define trig_pin 12
+#define trig_pin 13
 
-bool trig;
+int trig;
 
 void setup() {
   Serial.begin(9600);
   // put your setup code here, to run once:
   pinMode(move_pin, OUTPUT);
   pinMode(enable_pin, OUTPUT);
+  pinMode(trig_pin, INPUT);
 
 }
 
@@ -19,6 +20,7 @@ void loop() {
 
   Serial.print("Trig state is: ");
   Serial.println(trig);
+ 
 
   if (trig == 0) {
     Serial.println("Waiting for trigger");
