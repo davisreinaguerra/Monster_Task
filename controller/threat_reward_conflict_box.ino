@@ -22,8 +22,8 @@ lick_sensor lick(7);                      // D7
 #define sound_trigger_pin 8               // D8 
 #define threat_trigger_pin 9              // D9 ~
 alignment threat_trigger_alignment(10);   // D10 ~
-alignment lick_alignment(11);             // D11 ~
-alignment reward_alignment(12);           // D12
+alignment lick_reward_alignment(11);             // D11 ~
+alignment start_alignment(12);           // D12
                                           // D13
 
 //_____________Fixed Session Variables______________
@@ -120,6 +120,7 @@ void loop() {
       // Check for state switching events
       if (enterIR.is_broken()) {
         state = 1;
+        start_alignment.align_offset();
         Serial.println("State Switch -> Mouse Entered State");
       }
       if ((millis() - start_time) > enter_time_limit) {
@@ -130,7 +131,7 @@ void loop() {
       break; 
 
     case 1: // Mouse Entered
-      
+
       // Report this
       trial[current_trial].mouse_entered = true;
       trial[current_trial].latency_to_enter = millis() - start_time;
@@ -151,20 +152,8 @@ void loop() {
 
       // Do this
       threat_trigger_alignment.align_onset();
-      if (monster_qm == 1 && sound_qm == 1) {
-        digitalWrite(threat_trigger_pin, HIGH);
-        digitalWrite(sound_trigger_pin, HIGH);
-      }
-
-      if (monster_qm == 1 && sound_qm == 0) {
-        digitalWrite(threat_trigger_pin, HIGH);
-        digitalWrite(sound_trigger_pin, LOW);
-      }
-
-      if (monster_qm == 0 && sound_qm == 1) {
-        digitalWrite(threat_trigger_pin, LOW);
-        digitalWrite(sound_trigger_pin, HIGH);
-      }
+      digitalWrite(threat_trigger_pin, HIGH);
+      digitalWrite(sound_trigger_pin, HIGH);
       
       // Report this
       trial[current_trial].threat_triggered = true;
@@ -173,10 +162,12 @@ void loop() {
       // Check for state switching events
       if (lick.is_licked()) {
         state = 3;
+        lick_reward_alignment.align_onset(); 
         Serial.println("State Switch -> Port Licked State");
       }
       if (nestIR.is_broken()) {
         state = 5;
+        threat_trigger_alignment.align_offset();
         Serial.println("State Switch -> Trial Ended State");
       }
       
@@ -185,30 +176,23 @@ void loop() {
     case 3: // Port_licked
             
       lick_time = millis();
-      
-      // Do this
-      lick_alignment.align_onset();   
-
+  
       // Report this
       trial[current_trial].port_licked = true;
       trial[current_trial].latency_to_lick = millis() - start_time;
 
-      // Wait
-      delay(delay_between_lick_and_deliver);      
-
-      // Do this
-      reward_port.pulse_valve(solenoid_volume_delay);
-      reward_alignment.align_onset();
+      lick_reward_alignment.align_offset();
 
       // Wait
       delay(delay_between_lick_and_deliver);      
 
       // Do this
       reward_port.pulse_valve(solenoid_volume_delay);
-      reward_alignment.align_onset();
+      lick_reward_alignment.align_onset();
 
       state = 4;
       Serial.println("State Switch -> Reward Delivered State");
+      lick_reward_alignment.align_offset();
 
       break;
     
@@ -218,6 +202,7 @@ void loop() {
       if (nestIR.is_broken()) {
         trial[current_trial].escape_duration = millis() - lick_time;
         state = 5;
+        threat_trigger_alignment.align_offset();
         Serial.println("State Switch -> Trial Ended State");
       }
 
@@ -254,12 +239,14 @@ void loop() {
       //Move on to next trial
       current_trial += 1;
       state = 0;
+      start_alignment.align_onset();
       Serial.println("State Switch -> Session Begun State");
       start_time = millis();
       break;
 
     case 6: // Session Complete
       Serial.println("Session Complete!");
+      fast_close();
       while(1);
   }  
 
