@@ -29,7 +29,8 @@ alignment start_alignment(12);           // D12
 //_____________Fixed Session Variables______________
 #define n_trials 10
 #define alignment_duration 50 // ms
-#define solenoid_volume_delay 50 // ms
+#define solenoid_volume_delay 200 // ms
+#define flush_volume_delay 2000 // ms
 #define delay_between_lick_and_deliver 100 // ms
 
 //_____________Initialize flexible variables________
@@ -37,6 +38,8 @@ long int intertrial_interval;
 long int enter_time_limit;
 bool monster_qm;
 bool sound_qm;
+bool run_test_qm;
+bool begin_qm;
 
 
 // ____________Initialization Variables_____________
@@ -85,8 +88,41 @@ void setup() {
   Serial.print("Monster? = "); Serial.println(monster_qm);
   Serial.print("Sound? = "); Serial.println(sound_qm);
 
-  Serial.println("Enter 1 to start");
-  trial_config();
+  Serial.println("Would you like to run a test first?");
+  run_test = trial_config();
+  
+  if (run_test == true) {
+    fast_open();
+    delay(500);
+    fast_close();
+    delay(500);
+    slow_open();
+    delay(500);
+    slow_close();
+    delay(500);
+
+    while (!nestIR.isbroken()) {}
+    Serial.println("nestIR broken");
+
+    while (!enterIR.isbroken()) {}
+    Serial.println("enterIR broken");
+
+    while (!threatIR.isbroken()) {}
+    Serial.println("Threat IR broken");
+
+    while (!lick.is_licked()) {reward.valve_off();}
+    reward.pulse_valve(flush_duration);
+  }
+  
+  
+  Serial.println("Shall we begin? (1:yes, 0:no)");
+  begin_qm = trial_config();
+  
+  if (begin_qm == true) {}
+  if (begin_qm == false) {
+    Serial.println("Press reset to start over");
+    while(1);
+  }
 
   // Begin
   Serial.println("State Switch -> Session Begun State");
@@ -152,8 +188,8 @@ void loop() {
 
       // Do this
       threat_trigger_alignment.align_onset();
-      digitalWrite(threat_trigger_pin, HIGH);
-      digitalWrite(sound_trigger_pin, HIGH);
+      digitalWrite(threat_trigger_pin, monster_qm);
+      digitalWrite(sound_trigger_pin, sound_qm);
       
       // Report this
       trial[current_trial].threat_triggered = true;
