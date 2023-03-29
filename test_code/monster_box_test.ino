@@ -43,50 +43,17 @@ void setup() {
   slow_close();
   delay(500);
 
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
-  // IR tester
-  switch (nestIR.is_broken()) {
-    case true:
-      Serial.println("nestIR broken");
-      break;
-    case false:
-      break;
-  }
-  switch (enterIR.is_broken()) {
-    case true:
-      Serial.println("enterIR broken");
-      break;
-    case false:
-      break;
-  }
-  switch (threatIR.is_broken()) {
-    case true:
-      Serial.println("triggerIR broken");
-      break;
-    case false:
-      break;
-  }
-
-
-
-  // Lick sensor/ solenoid tester
-  switch (lick.is_licked()) {
-    case false:
-      Serial.println("Dont release water!");
-      reward.valve_off();
-      delay(reward_duration);
-      break;
-    case true:
-      Serial.println("Lick!");
-      Serial.println("let's open this valve");
-      reward.pulse_valve(reward_duration);
-      break;
-  }
-
+  while (!nestIR.isbroken()) {}
+  Serial.println("nestIR broken");
+  
+  while (!enterIR.isbroken()) {}
+  Serial.println("enterIR broken");
+  
+  while (!threatIR.isbroken()) {}
+  Serial.println("Threat IR broken");
+  
+  while (!lick.is_licked()) {reward.valve_off();}
+  reward.pulse_valve(flush_duration);
 
 }
 
