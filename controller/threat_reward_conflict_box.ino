@@ -118,10 +118,12 @@ void setup() {
   Serial.println("Shall we begin? (1:yes, 0:no)");
   begin_qm = trial_config();
   
-  if (begin_qm == true) {}
-  if (begin_qm == false) {
-    Serial.println("Press reset to start over");
-    while(1);
+  switch (begin_qm) {
+    case true:
+        break;
+    case false:
+        Serial.println("Press reset to start over");
+        while(1);
   }
 
   // Begin
