@@ -1,14 +1,51 @@
-//______________ Custom Classes_____________________________
-#include "IR_sensor.h"
+//______________ Custom Classes_____________________
 #include "lick_sensor.h"
 #include "solenoid.h"
 #include "alignment.h"
 
-//_______________ Door Servo Setup __________________
+//_______________ Door Servo Setup _________________
 #include <Servo.h>
 Servo doorServo;
 #define door_open_pos 85
 #define door_closed_pos 180
+
+// _______________LCD Display_______________________
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+// ____________Variable Initializations_____________
+const int flush_volume_delay 2000; // ms
+long int delay_between_lick_and_deliver 50;
+int current_trial = 0;
+unsigned long start_time;
+unsigned long lick_time;  
+int state;
+bool ready_to_begin = false;
+
+  // Session config
+long int n_trials;
+long int intertrial_interval;
+long int enter_time_limit;
+long int reward_volume;
+long int monster_qm;
+long int sound_qm;
+long int begin_qm;
+
+//_______________Data Structure____________________
+typedef struct {
+  // numerical data
+  long int trial_duration;
+  long int latency_to_enter;
+  long int latency_to_trigger;
+  long int latency_to_lick;
+  long int escape_duration;
+  // logical data  
+  bool mouse_entered = false;
+  bool threat_triggered = false;
+  bool port_licked = false;
+} monster_session;
+
+monster_session trial[n_trials];
 
 //_______________Pin Assignments_____________________
                                           // D0
@@ -26,69 +63,67 @@ alignment lick_reward_alignment(11);      // D11 ~
 alignment start_alignment(12);            // D12
                                           // D13
 
-
-//_____________Session Configuration variables________
-long int n_trials;
-long int intertrial_interval;
-long int enter_time_limit;
-long int monster_qm = 0;
-long int sound_qm = 0;
-long int delay_between_lick_and_deliver;
-long int solenoid_volume_delay;
-long int flush_qm = 0;
-long int begin_qm = 0;
-
-
-// ____________Initialization Variables_____________
-const int flush_volume_delay 2000; // ms
-int current_trial = 0;
-unsigned long start_time;
-unsigned long lick_time;  
-int state;
-bool ready_to_begin = false;
-
-//_______________Data Structure_____________________
-typedef struct {
-  // numerical data
-  long int trial_duration;
-  long int latency_to_enter;
-  long int latency_to_trigger;
-  long int latency_to_lick;
-  long int escape_duration;
-  // logical data  
-  bool mouse_entered = false;
-  bool threat_triggered = false;
-  bool port_licked = false;
-} monster_session;
-
-monster_session trial[n_trials];
-
 //_______________Void Setup_____________________
 
 void setup() {
+  // Open serial port
   Serial.begin(9600);
-  
+
   // PinModes
   pinMode(threat_trigger_pin, OUTPUT);
   pinMode(sound_trigger_pin, OUTPUT);
   doorServo.attach(door_pin);
 
-  n_trials = read_serial_config_line();
-  intertrial_interval = read_serial_config_line();
-  enter_time_limit = read_serial_config_line();
-  monster_qm = read_serial_config_line();
-  sound_qm = read_serial_config_line();
-  delay_between_lick_and_deliver = read_serial_config_line();
-  solenoid_volume_delay = read_serial_config_line();
-  flush_qm = read_serial_config_line();
-  begin_qm = read_serial_config_line();
+  // Initialize LCD screen
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+
+  // Configure Session
+  lcd_write(0, 0, "Waiting 4 config...");
+
+  n_trials = read_config();
+  intertrial_interval = read_config();
+  enter_time_limit = read_config();
+  reward_volume = read_config();
+  monster_qm = read_config();
+  sound_qm = read_config();
+  begin_qm = read_config();
+
+  // Report Configuration
+  lcd_write_2_lines(0, 0, "n_trials: ", 0, 2, String(n_trials));
+  lcd_write_2_lines(0, 0, "intertrial_interval (ms): ", 0, 2, String(intertrial_interval));
+  lcd_write_2_lines(0, 0, "enter_time_limit (ms): ", 0, 2, String(enter_time_limit));
+  lcd_write_2_lines(0, 0, "reward_volume (ms): ", 0, 2, String(reward_volume));
+
+  switch (monster_qm) {
+    case 1: 
+      lcd_write(0,0,"Monster: ON");
+      break;
+    case 0:
+      lcd_write(0,0,"Monster: OFF");
+      break;
+  }
+
+  switch (sound_qm) {
+    case 1: 
+      lcd_write(0,0,"Sound: ON");
+      break;
+    case 0:
+      lcd_write(0,0,"Sound: OFF");
+      break;
+  }
+
+  switch (begin_qm) {
+    case 1: 
+      lcd_write(0,0, "Session begun!");
+      break;
+    case 0:
+      while(1);
+  }
   
-  // Begins the experiment when begin_qm = false
-  while(!begin_qm) {}
   start_time = millis();
   state = 0;
-  Serial.println("State Switch -> Session Begun State");
-
 }
 
 //_______________Void Loop_____________________
@@ -262,18 +297,23 @@ void slow_close() {
   }
 }
 
-/* 
-//________________Trial Configuration Function __________
-long int trial_config() {
-  while (Serial.available() == 0) {} // wait for serial input
-  long int x = Serial.parseInt(); // save the input
-  Serial.end(); Serial.begin(9600); // Empties serial input buffer
-  return x; // returns the value which was input
-}  
-*/
-
-long int read_serial_config_line() {
+long int read_config() {
   while (!Serial.available()) {}
-  long int x = Serial.parseInt();
-  return x;
+  return Serial.parseInt();
+}
+
+void lcd_write(int space, int line, String message) {
+  lcd.clear();
+  lcd.setCursor(space, line);
+  lcd.print(message);
+  delay(2000);
+}
+
+void lcd_write_2_lines(int space1, int line1, String message1, int space2, int line2, String message2) {
+  lcd.clear();
+  lcd.setCursor(space1, line1);
+  lcd.print(message1);
+  lcd.setCursor(space2, line2);
+  lcd.print(message2);
+  delay(2000);
 }
