@@ -6,7 +6,7 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 
 # Running a Monster Task Experiment
 
-### Trial Configuration
+### Experiment Configuration
 Each experiment is configured via a MATLAB App which collects trial variables and writes the value of those variables to the serial port in sequential order.  Pressing the start button on the MATLAB GUI runs the below Serial port write function.  For further info on MATLAB configuration files, [click here](matlab_control)
 
 ```matlab
