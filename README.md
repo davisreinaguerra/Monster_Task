@@ -5,8 +5,19 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 ### MATLAB Control
 <img src="https://user-images.githubusercontent.com/105831652/233451605-7600fd7b-5b6c-497b-9f42-47473746b04c.png" alt="Monster GUI" width="230" height="250">
 Each trial is setup via a MATLAB App which collects trial variables and writes the value of those variables to the serial port in sequential order.
-``` .m
-
+```
+% Button pushed function: StartButton
+function start(app, event)
+    writeline(app.arduino_Obj, num2str(app.n_trials));
+    writeline(app.arduino_Obj, num2str(app.intertrial_interval));
+    writeline(app.arduino_Obj, num2str(app.enter_time_limit));
+    writeline(app.arduino_Obj, num2str(app.reward_volume));
+    writeline(app.arduino_Obj, num2str(app.monster_qm));
+    writeline(app.arduino_Obj, num2str(app.sound_qm));
+    writeline(app.arduino_Obj, "1");
+    delete(app.UIFigure);
+    delete(app);
+end
 ```
 
 
