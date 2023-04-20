@@ -2,6 +2,7 @@
 #include "lick_sensor.h"
 #include "solenoid.h"
 #include "alignment.h"
+#include "IR_sensor.h"
 
 //_______________ Door Servo Setup _________________
 #include <Servo.h>
@@ -134,7 +135,7 @@ void loop() {
 
   switch (state) {
     
-    case 0: // Trial begun
+    case 0: // Session Begun
 
       // Do this
       fast_open();
@@ -144,10 +145,12 @@ void loop() {
         state = 1;
         start_alignment.align_offset();
         Serial.println("State Switch -> Mouse Entered State");
+        lcd_write("Mouse Entered");
       }
       if ((millis() - start_time) > enter_time_limit) {
         state = 5;
         Serial.println("State Switch -> Trial Ended State");
+        lcd_write("Trial ended");
       }
       
       break; 
@@ -162,10 +165,12 @@ void loop() {
       if (threatIR.is_broken()) {
         state = 2;
         Serial.println("State Switch -> Threat Triggered State");
+        lcd_write("Threat triggered");
       }
       if (nestIR.is_broken()) {
         state = 5;
         Serial.println("State Switch -> Trial Ended State");
+        lcd_write("Trial ended");
       }
       
       break;
@@ -186,11 +191,13 @@ void loop() {
         state = 3;
         lick_reward_alignment.align_onset(); 
         Serial.println("State Switch -> Port Licked State");
+        lcd_write("Port Licked");
       }
       if (nestIR.is_broken()) {
         state = 5;
         threat_trigger_alignment.align_offset();
         Serial.println("State Switch -> Trial Ended State");
+        lcd_write("Trial ended");
       }
       
       break;
@@ -214,6 +221,7 @@ void loop() {
 
       state = 4;
       Serial.println("State Switch -> Reward Delivered State");
+      lcd_write("Reward Delivered");
       lick_reward_alignment.align_offset();
 
       break;
@@ -226,6 +234,7 @@ void loop() {
         state = 5;
         threat_trigger_alignment.align_offset();
         Serial.println("State Switch -> Trial Ended State");
+        lcd_write("Trial ended");
       }
 
       break;
@@ -272,8 +281,6 @@ void loop() {
       while(1);
   }  
 
-}
-
 //________________Door Functions ________________________
 void fast_open() {
   doorServo.write(door_open_pos);
@@ -302,7 +309,7 @@ long int read_config() {
   return Serial.parseInt();
 }
 
-void lcd_write(int space, int line, String message) {
+void lcd_write(String message) {
   lcd.clear();
   lcd.setCursor(space, line);
   lcd.print(message);
