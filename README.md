@@ -7,10 +7,10 @@ Presented here is an open source version of the Monster Task based on a custom C
 D0 : unused\
 D1 : unused\
 D2 : NestIR : Infrared breakbeam sensor checking for the presence of the mouse in the nest\
-D3 : EnterIR : Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
+D3~ : EnterIR : Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
 D4 : TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers the Monster and sound\
-D5
-D6
+D5~ : Door_pin :
+D6~ : Reward_Port : 
 D7
 D8 
 D9
