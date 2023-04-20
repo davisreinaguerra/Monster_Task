@@ -4,4 +4,4 @@ The assessment of ethologically relevant foraging behaviors requires behavioral 
 
 Presented here is an open source version of the Monster Task based on the Arduino Uno Microcontroller.
 
-![Monster Box](davisreinaguerra/Monster_Task/pictures/Monster_box.jpg)
+![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
