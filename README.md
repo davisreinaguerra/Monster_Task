@@ -65,3 +65,7 @@ For the arduino code which controls threats [click here](arduino_treats/README.m
 | D11~| Lick_Reward_Alignment    | Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered |
 | D12 | Start_Alignment          | Writes HIGH when trials starts, Writes LOW when trial ends |
 | D13 | unused                   | |
+
+## Fiber Photometry
+
+The Monster Task is setup to send digital alignment signals to a Fiber Photometry Data Acquisition Module.  The code for running dual color fiber photometry using a DORIC minicube and custom labjack software can be found [here](matlab_fiber_photometry)
