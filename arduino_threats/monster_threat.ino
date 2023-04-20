@@ -24,6 +24,7 @@ void loop() {
 
   if (trig == 0) {
     Serial.println("Waiting for trigger");
+    digitalWrite(move_pin, LOW);
     digitalWrite(enable_pin, LOW);
   }
   
@@ -38,6 +39,3 @@ void loop() {
     delay(500);
 
   }
-
-  delay(50);
-}
