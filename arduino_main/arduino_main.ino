@@ -12,18 +12,18 @@ Servo doorServo;
 
 // _______________LCD Display_______________________
 #include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x27,20,4);
+LiquidCrystal_I2C lcd(0x27,16,2);
 
 // ____________Variable Initializations_____________
-const int flush_volume_delay 2000; // ms
-long int delay_between_lick_and_deliver 50;
-int current_trial = 0;
+const int delay_between_lick_and_deliver = 50;
+int current_trial = 1;
 unsigned long start_time;
 unsigned long lick_time;  
 int state;
 bool ready_to_begin = false;
+const int max_trials = 30;
 
-  // Session config
+// Session config
 long int n_trials;
 long int intertrial_interval;
 long int enter_time_limit;
@@ -46,7 +46,7 @@ typedef struct {
   bool port_licked = false;
 } monster_session;
 
-monster_session trial[n_trials];
+monster_session trial[max_trials];
 
 //_______________Pin Assignments_____________________
                                           // D0
@@ -81,7 +81,7 @@ void setup() {
   lcd.backlight();
 
   // Configure Session
-  lcd_write(0, 0, "Waiting 4 config...");
+  lcd_write("Waiting 4 config...");
 
   n_trials = read_config();
   intertrial_interval = read_config();
@@ -92,32 +92,32 @@ void setup() {
   begin_qm = read_config();
 
   // Report Configuration
-  lcd_write_2_lines(0, 0, "n_trials: ", 0, 2, String(n_trials));
-  lcd_write_2_lines(0, 0, "intertrial_interval (ms): ", 0, 2, String(intertrial_interval));
-  lcd_write_2_lines(0, 0, "enter_time_limit (ms): ", 0, 2, String(enter_time_limit));
-  lcd_write_2_lines(0, 0, "reward_volume (ms): ", 0, 2, String(reward_volume));
+  lcd_write_2_lines(0, 0, "n_trials: ", 0, 1, String(n_trials)); delay(2000);
+  lcd_write_2_lines(0, 0, "intertrial_interval (ms): ", 0, 1, String(intertrial_interval)); delay(2000);
+  lcd_write_2_lines(0, 0, "enter_time_limit (ms): ", 0, 1, String(enter_time_limit)); delay(2000);
+  lcd_write_2_lines(0, 0, "reward_volume (ms): ", 0, 1, String(reward_volume)); delay(2000);
 
   switch (monster_qm) {
     case 1: 
-      lcd_write(0,0,"Monster: ON");
+      lcd_write("Monster: ON"); delay(2000);
       break;
     case 0:
-      lcd_write(0,0,"Monster: OFF");
+      lcd_write("Monster: OFF"); delay(2000);
       break;
   }
 
   switch (sound_qm) {
     case 1: 
-      lcd_write(0,0,"Sound: ON");
+      lcd_write("Sound: ON"); delay(2000);
       break;
     case 0:
-      lcd_write(0,0,"Sound: OFF");
+      lcd_write("Sound: OFF"); delay(2000);
       break;
   }
 
   switch (begin_qm) {
     case 1: 
-      lcd_write(0,0, "Session begun!");
+      lcd_write("Session begun!"); delay(2000);
       break;
     case 0:
       while(1);
@@ -144,7 +144,7 @@ void loop() {
       if (enterIR.is_broken()) {
         state = 1;
         start_alignment.align_offset();
-        Serial.println("State Switch -> Mouse Entered State");
+        //Serial.println("State Switch -> Mouse Entered State");
         lcd_write("Mouse Entered");
       }
       if ((millis() - start_time) > enter_time_limit) {
@@ -164,12 +164,12 @@ void loop() {
       // Check for state switching events
       if (threatIR.is_broken()) {
         state = 2;
-        Serial.println("State Switch -> Threat Triggered State");
+        //Serial.println("State Switch -> Threat Triggered State");
         lcd_write("Threat triggered");
       }
       if (nestIR.is_broken()) {
         state = 5;
-        Serial.println("State Switch -> Trial Ended State");
+        //Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
       
@@ -190,13 +190,13 @@ void loop() {
       if (lick.is_licked()) {
         state = 3;
         lick_reward_alignment.align_onset(); 
-        Serial.println("State Switch -> Port Licked State");
+        //Serial.println("State Switch -> Port Licked State");
         lcd_write("Port Licked");
       }
       if (nestIR.is_broken()) {
         state = 5;
         threat_trigger_alignment.align_offset();
-        Serial.println("State Switch -> Trial Ended State");
+        //Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
       
@@ -216,11 +216,11 @@ void loop() {
       delay(delay_between_lick_and_deliver);      
 
       // Do this
-      reward_port.pulse_valve(solenoid_volume_delay);
+      reward_port.pulse_valve(reward_volume);
       lick_reward_alignment.align_onset();
 
       state = 4;
-      Serial.println("State Switch -> Reward Delivered State");
+      //Serial.println("State Switch -> Reward Delivered State");
       lcd_write("Reward Delivered");
       lick_reward_alignment.align_offset();
 
@@ -233,7 +233,7 @@ void loop() {
         trial[current_trial].escape_duration = millis() - lick_time;
         state = 5;
         threat_trigger_alignment.align_offset();
-        Serial.println("State Switch -> Trial Ended State");
+        //Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
 
@@ -241,8 +241,9 @@ void loop() {
 
     case 5: // Trial_ended
       
-      // Close the door
+      // Close the door and retract the monster
       fast_close();
+      
       
       // Report this
       Serial.println("# Trial has ended");
@@ -271,17 +272,22 @@ void loop() {
       current_trial += 1;
       state = 0;
       start_alignment.align_onset();
-      Serial.println("State Switch -> Session Begun State");
+      //Serial.println("State Switch -> Session Begun State");
       start_time = millis();
       break;
 
     case 6: // Session Complete
-      Serial.println("Session Complete!");
+      //Serial.println("Session Complete!");
+      lcd_write("Experiment complete!")
       fast_close();
       while(1);
   }  
 
-//________________Door Functions ________________________
+}
+
+
+
+//________________Function Declarations ________________________
 void fast_open() {
   doorServo.write(door_open_pos);
 }
@@ -311,9 +317,8 @@ long int read_config() {
 
 void lcd_write(String message) {
   lcd.clear();
-  lcd.setCursor(space, line);
+  lcd.setCursor(0, 0);
   lcd.print(message);
-  delay(2000);
 }
 
 void lcd_write_2_lines(int space1, int line1, String message1, int space2, int line2, String message2) {
@@ -322,5 +327,4 @@ void lcd_write_2_lines(int space1, int line1, String message1, int space2, int l
   lcd.print(message1);
   lcd.setCursor(space2, line2);
   lcd.print(message2);
-  delay(2000);
 }
