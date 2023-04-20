@@ -4,7 +4,7 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 
 Presented here is an open source version of the Monster Task based on a custom C++/Arduino script uploaded to an Arduino Uno Microcontroller which both monitors the state of sensors via digital inputs and elicits changes in the state of actuators via digital outputs.  Listed below are the digital pins of the main arudino as well as the components with which they interface:
 
-
+________Pin Assignments_________
 D0 : unused\
 D1 : unused\
 D2 : NestIR : Infrared breakbeam sensor checking for the presence of the mouse in the nest
