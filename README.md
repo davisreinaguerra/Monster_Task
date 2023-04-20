@@ -39,5 +39,68 @@ typedef struct {
 
 monster_session trial[n_trials];
 ```
+
+```c++
+void setup() {
+  // Open serial port
+  Serial.begin(9600);
+
+  // PinModes
+  pinMode(threat_trigger_pin, OUTPUT);
+  pinMode(sound_trigger_pin, OUTPUT);
+  doorServo.attach(door_pin);
+
+  // Initialize LCD screen
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+
+  // Configure Session
+  lcd_write(0, 0, "Waiting 4 config...");
+
+  n_trials = read_config();
+  intertrial_interval = read_config();
+  enter_time_limit = read_config();
+  reward_volume = read_config();
+  monster_qm = read_config();
+  sound_qm = read_config();
+  begin_qm = read_config();
+
+  // Report Configuration
+  lcd_write_2_lines(0, 0, "n_trials: ", 0, 2, String(n_trials));
+  lcd_write_2_lines(0, 0, "intertrial_interval (ms): ", 0, 2, String(intertrial_interval));
+  lcd_write_2_lines(0, 0, "enter_time_limit (ms): ", 0, 2, String(enter_time_limit));
+  lcd_write_2_lines(0, 0, "reward_volume (ms): ", 0, 2, String(reward_volume));
+
+  switch (monster_qm) {
+    case 1: 
+      lcd_write(0,0,"Monster: ON");
+      break;
+    case 0:
+      lcd_write(0,0,"Monster: OFF");
+      break;
+  }
+
+  switch (sound_qm) {
+    case 1: 
+      lcd_write(0,0,"Sound: ON");
+      break;
+    case 0:
+      lcd_write(0,0,"Sound: OFF");
+      break;
+  }
+
+  switch (begin_qm) {
+    case 1: 
+      lcd_write(0,0, "Session begun!");
+      break;
+    case 0:
+      while(1);
+  }
+  
+  start_time = millis();
+  state = 0;
+}
+```
 ### Schematic of the Box
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
