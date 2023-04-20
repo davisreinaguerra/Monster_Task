@@ -24,7 +24,6 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 ### Data Structure
 
 ```c++
-//_______________Data Structure____________________
 typedef struct {
   // numerical data
   long int trial_duration;
