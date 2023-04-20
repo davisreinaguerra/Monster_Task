@@ -11,12 +11,12 @@ D3~  : EnterIR : Infrared breabeam sensor checking for the entry of the mouse in
 D4   : TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound\
 D5~  : Door : Hobby servo mounted with an arm connected to the door between the nest and foraging chambers\
 D6~  : Reward_Port : Provides digital trigger pulses to control a small solenoid valve which opens to the lick port\
-D7   : Lick_Sensor : Capacitive sensor breakout which checks for licks via a wired connection to the aluminum lick port\ 
-D8   : Sound_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest (can be disabled for NoMonster trials)\
-D9~  : Threat_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest (can be disabled for NoSound trials)\
+D7   : Lick_Sensor : Capacitive sensor breakout which checks for licks via a wired connection to the aluminum lick port\
+D8   : Sound_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest\
+D9~  : Threat_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest\
 D10~ : Threat_Trigger_Alignment : Writes HIGH when threat is triggered, writes LOW when the animal re-enters the nest\
-D11~ : Lick_Reward_Alignment : Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered in response (after short delay)\
-D12  : Start_Alignment : Writes HIGH when trials starts, Writes LOW when trial ends
+D11~ : Lick_Reward_Alignment : Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered\
+D12  : Start_Alignment : Writes HIGH when trials starts, Writes LOW when trial ends\
 D13  : unused\
 
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
