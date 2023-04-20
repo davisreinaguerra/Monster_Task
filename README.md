@@ -6,8 +6,8 @@ Presented here is an open source version of the Monster Task based on a custom C
 
 | Pin | name                     | description |
 |-----|--------------------------|-------------|
-| D0  | unused                   | 
-| D1  | unused                   | 
+| D0  | unused                   | |
+| D1  | unused                   | |
 | D2  | NestIR                   | Infrared breakbeam sensor checking for the presence of the mouse in the nest |
 | D3~ | EnterIR                  | Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber |
 | D4  | TriggerIR                | Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound |
@@ -19,7 +19,7 @@ Presented here is an open source version of the Monster Task based on a custom C
 | D10~| Threat_Trigger_Alignment | Writes HIGH when threat is triggered, writes LOW when the animal re-enters the nest |
 | D11~| Lick_Reward_Alignment    | Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered |
 | D12 | Start_Alignment          | Writes HIGH when trials starts, Writes LOW when trial ends |
-| D13 | unused                   |
+| D13 | unused                   | |
 
 ```c++
 //_______________Data Structure____________________
