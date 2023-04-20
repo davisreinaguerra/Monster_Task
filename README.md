@@ -4,19 +4,19 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 
 Presented here is an open source version of the Monster Task based on a custom C++/Arduino script uploaded to an Arduino Uno Microcontroller which both monitors the state of sensors via digital inputs and elicits changes in the state of actuators via digital outputs.  Listed below are the digital pins of the main arudino as well as the components with which they interface:
 
-D0 : unused\
-D1 : unused\
-D2 : NestIR : Infrared breakbeam sensor checking for the presence of the mouse in the nest\
-D3~ : EnterIR : Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
-D4 : TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers the Monster and sound\
-D5~ : Door_pin :
-D6~ : Reward_Port : 
-D7
-D8 
-D9
-D10
-D11
-D12
-D13
+D0   : unused\
+D1   : unused\
+D2   : NestIR : Infrared breakbeam sensor checking for the presence of the mouse in the nest\
+D3~  : EnterIR : Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
+D4   : TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers the Monster and sound\
+D5~  : Door : Hobby servo mounted with an arm which is interfaced with the acrylic panel which forms the door between the nest and foraging chambers\
+D6~  : Reward_Port : Pin which provides digital trigger pulses to a MOSFET trigger switch providing control over a small solenoid valve which opens to the lick port\
+D7   : Lick_Sensor : Capacitive sensor breakout which checks for licks via a wired connection to the aluminum lick port\ 
+D8   : Sound_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest (can be disabled for NoMonster trials)\
+D9~  : Threat_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest (can be disabled for NoSound trials)\
+D10~ : Threat_Trigger_Alignment : Writes HIGH when threat is triggered, writes LOW when the animal re-enters the nest\
+D11~ : Lick_Reward_Alignment : Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered in response (after short delay)\
+D12  : Start_Alignment : Writes HIGH when trials starts, Writes LOW when trial ends
+D13  : unused\
 
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
