@@ -39,5 +39,5 @@ typedef struct {
 
 monster_session trial[n_trials];
 ```
-
+### Schematic of the Box
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
