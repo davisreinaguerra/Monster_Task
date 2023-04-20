@@ -8,9 +8,9 @@ D0   : unused\
 D1   : unused\
 D2   : NestIR : Infrared breakbeam sensor checking for the presence of the mouse in the nest\
 D3~  : EnterIR : Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
-D4   : TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers the Monster and sound\
-D5~  : Door : Hobby servo mounted with an arm which is interfaced with the acrylic panel which forms the door between the nest and foraging chambers\
-D6~  : Reward_Port : Pin which provides digital trigger pulses to a MOSFET trigger switch providing control over a small solenoid valve which opens to the lick port\
+D4   : TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound\
+D5~  : Door : Hobby servo mounted with an arm connected to the door between the nest and foraging chambers\
+D6~  : Reward_Port : Provides digital trigger pulses to control a small solenoid valve which opens to the lick port\
 D7   : Lick_Sensor : Capacitive sensor breakout which checks for licks via a wired connection to the aluminum lick port\ 
 D8   : Sound_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest (can be disabled for NoMonster trials)\
 D9~  : Threat_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest (can be disabled for NoSound trials)\
