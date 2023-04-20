@@ -19,4 +19,22 @@ D11~ : Lick_Reward_Alignment : Writes HIGH when the animal licks the reward port
 D12  : Start_Alignment : Writes HIGH when trials starts, Writes LOW when trial ends\
 D13  : unused\
 
+```c++
+//_______________Pin Assignments_____________________
+                                          // D0
+                                          // D1
+IR_sensor nestIR(2);                      // D2
+IR_sensor enterIR(3);                     // D3 ~
+IR_sensor threatIR(4);                    // D4
+#define door_pin 5                        // D5 ~
+solenoid reward_port(6);                  // D6 ~
+lick_sensor lick(7);                      // D7
+#define sound_trigger_pin 8               // D8 
+#define threat_trigger_pin 9              // D9 ~
+alignment threat_trigger_alignment(10);   // D10 ~
+alignment lick_reward_alignment(11);      // D11 ~
+alignment start_alignment(12);            // D12
+                                          // D13
+```
+
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
