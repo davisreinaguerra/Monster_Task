@@ -144,12 +144,10 @@ void loop() {
       if (enterIR.is_broken()) {
         state = 1;
         start_alignment.align_offset();
-        //Serial.println("State Switch -> Mouse Entered State");
         lcd_write("Mouse Entered");
       }
       if ((millis() - start_time) > enter_time_limit) {
         state = 5;
-        Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
       
@@ -164,12 +162,10 @@ void loop() {
       // Check for state switching events
       if (threatIR.is_broken()) {
         state = 2;
-        //Serial.println("State Switch -> Threat Triggered State");
         lcd_write("Threat triggered");
       }
       if (nestIR.is_broken()) {
         state = 5;
-        //Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
       
@@ -190,13 +186,11 @@ void loop() {
       if (lick.is_licked()) {
         state = 3;
         lick_reward_alignment.align_onset(); 
-        //Serial.println("State Switch -> Port Licked State");
         lcd_write("Port Licked");
       }
       if (nestIR.is_broken()) {
         state = 5;
         threat_trigger_alignment.align_offset();
-        //Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
       
@@ -220,7 +214,6 @@ void loop() {
       lick_reward_alignment.align_onset();
 
       state = 4;
-      //Serial.println("State Switch -> Reward Delivered State");
       lcd_write("Reward Delivered");
       lick_reward_alignment.align_offset();
 
@@ -233,7 +226,6 @@ void loop() {
         trial[current_trial].escape_duration = millis() - lick_time;
         state = 5;
         threat_trigger_alignment.align_offset();
-        //Serial.println("State Switch -> Trial Ended State");
         lcd_write("Trial ended");
       }
 
@@ -243,7 +235,7 @@ void loop() {
       
       // Close the door and retract the monster
       fast_close();
-      
+
       
       // Report this
       Serial.println("# Trial has ended");
@@ -272,12 +264,10 @@ void loop() {
       current_trial += 1;
       state = 0;
       start_alignment.align_onset();
-      //Serial.println("State Switch -> Session Begun State");
       start_time = millis();
       break;
 
     case 6: // Session Complete
-      //Serial.println("Session Complete!");
       lcd_write("Experiment complete!")
       fast_close();
       while(1);
