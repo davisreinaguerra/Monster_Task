@@ -4,39 +4,39 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 
 Presented here is an open source version of the Monster Task based on a custom C++/Arduino script uploaded to an Arduino Uno Microcontroller which both monitors the state of sensors via digital inputs and elicits changes in the state of actuators via digital outputs.  Listed below are the digital pins of the main arudino as well as the components with which they interface:
 
-| Pin | name | description |
-|-----|------|-------------|
-| D0 | unused\ | |
-| D1  | unused\
-| D2  | NestIR : Infrared breakbeam sensor checking for the presence of the mouse in the nest\
-| D3~ | EnterIR : Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
-| D4  | TriggerIR : Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound\
-| D5~ | Door : Hobby servo mounted with an arm connected to the door between the nest and foraging chambers\
-| D6~ | Reward_Port : Provides digital trigger pulses to control a small solenoid valve which opens to the lick port\
-| D7  | Lick_Sensor : Capacitive sensor breakout which checks for licks via a wired connection to the aluminum lick port\
-| D8  | Sound_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest\
-| D9~ | Threat_Trigger : Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest\
-| D10~| Threat_Trigger_Alignment : Writes HIGH when threat is triggered, writes LOW when the animal re-enters the nest\
-| D11~| Lick_Reward_Alignment : Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered\
-| D12 | Start_Alignment : Writes HIGH when trials starts, Writes LOW when trial ends\
-| D13 | unused\
+| Pin | name                     | description |
+|-----|--------------------------|-------------|
+| D0  | unused\                  | 
+| D1  | unused\                  | 
+| D2  | NestIR                   | Infrared breakbeam sensor checking for the presence of the mouse in the nest\ 
+| D3~ | EnterIR                  | Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber\
+| D4  | TriggerIR                | Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound\
+| D5~ | Door                     | Hobby servo mounted with an arm connected to the door between the nest and foraging chambers\
+| D6~ | Reward_Port              | Provides digital trigger pulses to control a small solenoid valve which opens to the lick port\
+| D7  | Lick_Sensor              | Capacitive sensor breakout which checks for licks via a wired connection to the aluminum lick port\
+| D8  | Sound_Trigger            | Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest\
+| D9~ | Threat_Trigger           | Writes HIGH when the animal crosses the TriggerIR, writes LOW when the animal re-enters the nest\
+| D10~| Threat_Trigger_Alignment | Writes HIGH when threat is triggered, writes LOW when the animal re-enters the nest\
+| D11~| Lick_Reward_Alignment    | Writes HIGH when the animal licks the reward port, writes LOW when reward is delivered\
+| D12 | Start_Alignment          | Writes HIGH when trials starts, Writes LOW when trial ends\
+| D13 | unused\                  |
 
 ```c++
-//_______________Pin Assignments_____________________
-                                          // D0
-                                          // D1
-IR_sensor nestIR(2);                      // D2
-IR_sensor enterIR(3);                     // D3 ~
-IR_sensor threatIR(4);                    // D4
-#define door_pin 5                        // D5 ~
-solenoid reward_port(6);                  // D6 ~
-lick_sensor lick(7);                      // D7
-#define sound_trigger_pin 8               // D8 
-#define threat_trigger_pin 9              // D9 ~
-alignment threat_trigger_alignment(10);   // D10 ~
-alignment lick_reward_alignment(11);      // D11 ~
-alignment start_alignment(12);            // D12
-                                          // D13
+//_______________Data Structure____________________
+typedef struct {
+  // numerical data
+  long int trial_duration;
+  long int latency_to_enter;
+  long int latency_to_trigger;
+  long int latency_to_lick;
+  long int escape_duration;
+  // logical data  
+  bool mouse_entered = false;
+  bool threat_triggered = false;
+  bool port_licked = false;
+} monster_session;
+
+monster_session trial[n_trials];
 ```
 
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
