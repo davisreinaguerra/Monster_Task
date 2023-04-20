@@ -4,11 +4,11 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 
 ### Pin Assignments
 
-| Pin | name                     | description |
+| Pin | Name                     | Description |
 |-----|--------------------------|-------------|
 | D0  | unused                   | |
 | D1  | unused                   | |
-| D2  | NestI                    | Infrared breakbeam sensor checking for the presence of the mouse in the nest |
+| D2  | NestIR                   | Infrared breakbeam sensor checking for the presence of the mouse in the nest |
 | D3~ | EnterIR                  | Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber |
 | D4  | TriggerIR                | Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound |
 | D5~ | Door                     | Hobby servo mounted with an arm connected to the door between the nest and foraging chambers |
