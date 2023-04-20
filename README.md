@@ -45,7 +45,7 @@ sound_qm = read_config();
 begin_qm = read_config();
 ```
 
-For the main arduino code [click here](arduino_main\README.md)
+For the main arduino code [click here](arduino_main/README.md)
 
 ### Arduino Pin Assignments
 
