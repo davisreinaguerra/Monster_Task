@@ -2,7 +2,7 @@
 
 The assessment of ethologically relevant foraging behaviors of mice requires behavior-experimental apparati which simultaneously offer rewards and introduce threats to the animal.  The Monster Task developed by Tsutsui-Kimura et al., (2022) is an open-top rectangular box with two chambers: a “nest” chamber which is kept under low illumination to mimic an environmental shelter, and a foraging chamber under high illumination to mimic a daytime foraging situation which requires the mouse leaves its shelter (figure 3). On the far side of the foraging chamber is a mock predator (“Monster”) attached to a motor and positioned behind a reward port which extends upwards from the floor to deliver a pre-set aliquot of water after a fixed number of licks. To get to the reward port, the mice must cross a threshold which is monitored by an infrared break-beam sensor, the crossing of which triggers rapid back and forth movement of the Monster, and a loud complex sound produced by an overhead speaker.  Presented here is an open source version of the Monster Task based on a custom C++/Arduino script uploaded to an Arduino Uno Microcontroller which both monitors the state of sensors via digital inputs and elicits changes in the state of actuators via digital outputs.  
 
-### MATLAB Control
+### MATLAB Trial Configuration
 Each trial is setup via a MATLAB App which collects trial variables and writes the value of those variables to the serial port in sequential order.  Pressing the start button on the MATLAB GUI runs the below Serial port write function.
 
 ```matlab
@@ -20,8 +20,29 @@ function start(app, event)
 end
 ```
 
+### Arduino Trial Configuration
+Arduino then reads the trial configuration information with the below function
 
-### Pin Assignments
+``` c++
+long int read_config() {
+  while (!Serial.available()) {}
+  return Serial.parseInt();
+}
+```
+
+And assigns those values to variables via: 
+
+``` c++
+n_trials = read_config();
+intertrial_interval = read_config();
+enter_time_limit = read_config();
+reward_volume = read_config();
+monster_qm = read_config();
+sound_qm = read_config();
+begin_qm = read_config();
+```
+
+### Arduino Pin Assignments
 
 | Pin | Name                     | Description |
 |-----|--------------------------|-------------|
