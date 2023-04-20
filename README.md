@@ -8,7 +8,7 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 |-----|--------------------------|-------------|
 | D0  | unused                   | |
 | D1  | unused                   | |
-| D2  | NestI                   | Infrared breakbeam sensor checking for the presence of the mouse in the nest |
+| D2  | NestI                    | Infrared breakbeam sensor checking for the presence of the mouse in the nest |
 | D3~ | EnterIR                  | Infrared breabeam sensor checking for the entry of the mouse into the foraging chamber |
 | D4  | TriggerIR                | Infrared breakbeam sensor which checks for the crossing of a position which triggers Monster and sound |
 | D5~ | Door                     | Hobby servo mounted with an arm connected to the door between the nest and foraging chambers |
@@ -21,9 +21,44 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 | D12 | Start_Alignment          | Writes HIGH when trials starts, Writes LOW when trial ends |
 | D13 | unused                   | |
 
-### Data Structure
+### Initialization Code
 
 ```c++
+//______________ Custom Classes_____________________
+#include "lick_sensor.h"
+#include "solenoid.h"
+#include "alignment.h"
+#include "IR_sensor.h"
+
+//_______________ Door Servo Setup _________________
+#include <Servo.h>
+Servo doorServo;
+#define door_open_pos 85
+#define door_closed_pos 180
+
+// _______________LCD Display_______________________
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+// ____________Variable Initializations_____________
+const int flush_volume_delay 2000; // ms
+long int delay_between_lick_and_deliver 50;
+int current_trial = 0;
+unsigned long start_time;
+unsigned long lick_time;  
+int state;
+bool ready_to_begin = false;
+
+  // Session config
+long int n_trials;
+long int intertrial_interval;
+long int enter_time_limit;
+long int reward_volume;
+long int monster_qm;
+long int sound_qm;
+long int begin_qm;
+
+//_______________Data Structure____________________
 typedef struct {
   // numerical data
   long int trial_duration;
@@ -38,8 +73,25 @@ typedef struct {
 } monster_session;
 
 monster_session trial[n_trials];
+
+//_______________Pin Assignments_____________________
+                                          // D0
+                                          // D1
+IR_sensor nestIR(2);                      // D2
+IR_sensor enterIR(3);                     // D3 ~
+IR_sensor threatIR(4);                    // D4
+#define door_pin 5                        // D5 ~
+solenoid reward_port(6);                  // D6 ~
+lick_sensor lick(7);                      // D7
+#define sound_trigger_pin 8               // D8 
+#define threat_trigger_pin 9              // D9 ~
+alignment threat_trigger_alignment(10);   // D10 ~
+alignment lick_reward_alignment(11);      // D11 ~
+alignment start_alignment(12);            // D12
+                                          // D13
 ```
 
+### Void Setup
 ```c++
 void setup() {
   // Open serial port
@@ -102,5 +154,16 @@ void setup() {
   state = 0;
 }
 ```
+
+### Void Loop
+```c++
+
+```
+
+### Function Declarations
+```c++
+
+```
+
 ### Schematic of the Box
 ![Monster_box](https://user-images.githubusercontent.com/105831652/233440444-31a570cd-8833-4d27-8929-179d749f7888.jpg)
