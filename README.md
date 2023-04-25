@@ -31,7 +31,7 @@ begin_qm = read_config();
 ```
 
 For the main arduino code [click here](arduino_main)\
-For the arduino code which controls threats [click here](arduino_treats)
+For the arduino code which controls threats [click here](arduino_threats)
 
 ### Arduino Pin Assignments
 
