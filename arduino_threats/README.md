@@ -23,4 +23,4 @@ Writing B to HIGH defaults the monster to home position when A is not HIGH
 
 ### Sound threat
 
-The sound threat uses an arudino mounted with the [Adafruit MusicMaker Shield](https://www.adafruit.com/product/1788?gclid=CjwKCAjw9J2iBhBPEiwAErwpeWwl9f1PgD9kfVCXchjUjjsCTonBNh7ZSCb0KMKRhU7HS0oyAaFtTRoCKM8QAvD_BwE).  In this shiled is an SD card containing a file called GODZILLA.mp3.  
+The sound threat uses an arudino mounted with the [Adafruit MusicMaker Shield](https://www.adafruit.com/product/1788?gclid=CjwKCAjw9J2iBhBPEiwAErwpeWwl9f1PgD9kfVCXchjUjjsCTonBNh7ZSCb0KMKRhU7HS0oyAaFtTRoCKM8QAvD_BwE).  In this shield is an SD card containing a file called GODZILLA.mp3.  
