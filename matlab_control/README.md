@@ -17,3 +17,17 @@ The next step is to open the monsterapp, which provides this GUI:
 
 Pressing the "Run" button after entering values for each field executes a function which write those configuration values to the serial port where they will be read by arduino.  
 
+```matlab
+% Button pushed function: StartButton
+function start(app, event)
+    writeline(app.arduino_Obj, num2str(app.n_trials));
+    writeline(app.arduino_Obj, num2str(app.intertrial_interval));
+    writeline(app.arduino_Obj, num2str(app.enter_time_limit));
+    writeline(app.arduino_Obj, num2str(app.reward_volume));
+    writeline(app.arduino_Obj, num2str(app.monster_qm));
+    writeline(app.arduino_Obj, num2str(app.sound_qm));
+    writeline(app.arduino_Obj, "1");
+    delete(app.UIFigure);
+    delete(app);
+end
+```
