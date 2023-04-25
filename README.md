@@ -7,22 +7,8 @@ The assessment of ethologically relevant foraging behaviors of mice requires beh
 # Running a Monster Task Experiment
 
 ### Experiment Configuration
-Each experiment is configured via a MATLAB App which collects trial variables and writes the value of those variables to the serial port in sequential order.  Pressing the start button on the MATLAB GUI runs the below Serial port write function.  For further info on MATLAB configuration files, [click here](matlab_control)
+Each experiment is configured via a MATLAB App which collects trial variables and writes the value of those variables to the serial port in sequential order.  For further info on MATLAB configuration files, [click here](matlab_control)
 
-```matlab
-% Button pushed function: StartButton
-function start(app, event)
-    writeline(app.arduino_Obj, num2str(app.n_trials));
-    writeline(app.arduino_Obj, num2str(app.intertrial_interval));
-    writeline(app.arduino_Obj, num2str(app.enter_time_limit));
-    writeline(app.arduino_Obj, num2str(app.reward_volume));
-    writeline(app.arduino_Obj, num2str(app.monster_qm));
-    writeline(app.arduino_Obj, num2str(app.sound_qm));
-    writeline(app.arduino_Obj, "1");
-    delete(app.UIFigure);
-    delete(app);
-end
-```
 Arduino then reads the trial configuration information with the below function
 
 ``` c++
