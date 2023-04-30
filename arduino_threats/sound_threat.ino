@@ -32,7 +32,7 @@ void setup() {
   Serial.println("SD Card found");
   
   // Set volume for (left, right) channels 
-  musicPlayer.setVolume(50,50); // lower numbers == louder volume!
+  musicPlayer.setVolume(30,30); // lower numbers == louder volume!
 }
 
 void loop() {
