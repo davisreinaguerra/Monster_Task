@@ -63,13 +63,13 @@ classdef monsterapp < matlab.apps.AppBase
         % Value changed function: EnterTimeLimitEditField
         function enter_time_limit_enter(app, event)
             value = app.EnterTimeLimitEditField.Value;
-            app.enter_time_limit = value;
+            app.enter_time_limit = value * 1000;
         end
 
         % Value changed function: IntertrialIntervalEditField
         function intertrial_interval_enter(app, event)
             value = app.IntertrialIntervalEditField.Value;
-            app.intertrial_interval = value;
+            app.intertrial_interval = value * 1000;
         end
 
         % Value changed function: NumberofTrialsEditField
@@ -146,14 +146,14 @@ classdef monsterapp < matlab.apps.AppBase
             app.msLabel.HorizontalAlignment = 'right';
             app.msLabel.FontSize = 18;
             app.msLabel.Position = [243 312 29 23];
-            app.msLabel.Text = 'ms';
+            app.msLabel.Text = 's';
 
             % Create msLabel_2
             app.msLabel_2 = uilabel(app.UIFigure);
             app.msLabel_2.HorizontalAlignment = 'right';
             app.msLabel_2.FontSize = 18;
             app.msLabel_2.Position = [243 279 29 23];
-            app.msLabel_2.Text = 'ms';
+            app.msLabel_2.Text = 's';
 
             % Create msLabel_3
             app.msLabel_3 = uilabel(app.UIFigure);
