@@ -10,3 +10,7 @@ IR_sensor::IR_sensor(int pin) {
 bool IR_sensor::is_broken() {
   return !digitalRead(_pin);
 }
+
+bool IR_sensor::isnt_broken() {
+  return digitalRead(_pin);
+}
