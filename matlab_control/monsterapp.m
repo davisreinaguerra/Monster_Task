@@ -6,6 +6,7 @@ classdef monsterapp < matlab.apps.AppBase
         StartButton                   matlab.ui.control.Button
         SoundCheckBox                 matlab.ui.control.CheckBox
         MonsterCheckBox               matlab.ui.control.CheckBox
+        FibPhotCheckBox               matlab.ui.control.CheckBox
         msLabel_3                     matlab.ui.control.Label
         msLabel_2                     matlab.ui.control.Label
         msLabel                       matlab.ui.control.Label
@@ -21,6 +22,7 @@ classdef monsterapp < matlab.apps.AppBase
         n_trials
         sound_qm
         monster_qm
+        fibphot_qm
         reward_volume
         intertrial_interval
         enter_time_limit
@@ -38,6 +40,9 @@ classdef monsterapp < matlab.apps.AppBase
             writeline(app.arduino_Obj, num2str(app.monster_qm));
             writeline(app.arduino_Obj, num2str(app.sound_qm));
             writeline(app.arduino_Obj, "1");
+            if (app.fibphot_qm == 1)
+                disp("Run the Photometry record function!");
+            end
             delete(app.UIFigure);
             delete(app);
         end
@@ -52,6 +57,12 @@ classdef monsterapp < matlab.apps.AppBase
         function monster_qm_check(app, event)
             value = app.MonsterCheckBox.Value;
             app.monster_qm = value;
+        end
+
+        % Value changed function: FibphotCheckBox
+        function fibphot_qm_check(app, event)
+            value = app.FibPhotCheckBox.Value;
+            app.fibphot_qm = value;
         end
 
         % Value changed function: RewardVolumeEditField
@@ -167,14 +178,21 @@ classdef monsterapp < matlab.apps.AppBase
             app.MonsterCheckBox.ValueChangedFcn = createCallbackFcn(app, @monster_qm_check, true);
             app.MonsterCheckBox.Text = 'Monster';
             app.MonsterCheckBox.FontSize = 18;
-            app.MonsterCheckBox.Position = [293 312 87 22];
+            app.MonsterCheckBox.Position = [300 320 87 22];
 
             % Create SoundCheckBox
             app.SoundCheckBox = uicheckbox(app.UIFigure);
             app.SoundCheckBox.ValueChangedFcn = createCallbackFcn(app, @sound_qm_check, true);
             app.SoundCheckBox.Text = 'Sound';
             app.SoundCheckBox.FontSize = 18;
-            app.SoundCheckBox.Position = [300 279 74 22];
+            app.SoundCheckBox.Position = [300 280 87 22];
+
+            % Create FibphotCheckBox
+            app.FibPhotCheckBox = uicheckbox(app.UIFigure);
+            app.FibPhotCheckBox.ValueChangedFcn = createCallbackFcn(app, @fibphot_qm_check, true);
+            app.FibPhotCheckBox.Text = 'FibPhot';
+            app.FibPhotCheckBox.FontSize = 18;
+            app.FibPhotCheckBox.Position = [300 240 87 22];
 
             % Create StartButton
             app.StartButton = uibutton(app.UIFigure, 'push');
@@ -201,7 +219,7 @@ classdef monsterapp < matlab.apps.AppBase
             registerApp(app, app.UIFigure)
 
             try
-                app.arduino_Obj = serialport("COM13",9600);
+                app.arduino_Obj = serialport("COM5",9600);
                 configureTerminator(app.arduino_Obj,"CR");
             catch ME
                 app.arduino_Obj = [];
