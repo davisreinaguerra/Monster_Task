@@ -75,6 +75,7 @@ classdef monsterapp < matlab.apps.AppBase
         function fibphot_qm_check(app, event)
             value = app.FibPhotCheckBox.Value;
             app.fibphot_qm = value;
+            assignin("base", "run_fibphot", app.fibphot_qm);
         end
 
         % Value changed function: RewardVolumeEditField
@@ -107,16 +108,19 @@ classdef monsterapp < matlab.apps.AppBase
         function date_enter(app, event)
             value = app.DateEditField.Value;
             app.date = value;
+            assignin("base", "date_handle", app.date);
         end
 
         function animal_code_enter(app, event)
             value = app.AnimalCodeEditField.Value;
             app.animal_code = value;
+            assignin("base", "animal_code_handle", app.animal_code);
         end
 
         function day_select(app, event)
             value = app.DayDropDown.Value;
             app.day = value;
+            assignin("base", "day_handle", app.day);
         end
 
 
@@ -316,7 +320,11 @@ classdef monsterapp < matlab.apps.AppBase
             app.monster_qm = 0;
             app.fibphot_qm = 0;
             app.start_qm = 0;
-            
+
+            app.date = "";
+            app.animal_code = "";
+            app.day = "Training1";
+            assignin("base", "day_handle", app.day);
 
             if nargout == 0
                 clear app
