@@ -150,6 +150,13 @@ void loop() {
         state = 2;
         lcd_write("Mouse going out");
       }
+      if (threatIR.is_broken()) {
+        previous_state = state; // mouse ran past the enter IR
+        state = 3;
+        lcd_write("Mouse entered");
+        trial[current_trial].mouse_entered = true;
+        trial[current_trial].latency_to_enter = millis() - start_time;
+      }
       if ((millis() - start_time) > enter_time_limit) {
         previous_state = state;
         state = 8;
@@ -172,7 +179,7 @@ void loop() {
         state = 1;
         lcd_write("Mouse went back");
       }
-      if (enterIR.isnt_broken() && nestIR.isnt_broken()) {    //  ran ahead
+      if (enterIR.isnt_broken() && nestIR.isnt_broken()) {    //  ran ahead and entered
         previous_state = state;
         state = 3;
         lcd_write("Mouse Entered");
@@ -254,21 +261,27 @@ void loop() {
       if (enterIR.is_broken() && nestIR.isnt_broken()) {      // changed mind didnt re-enter
         state = previous_state;
       } 
-      if (enterIR.isnt_broken() && nestIR.isnt_broken()) {    // fully entered nest
-        previous_state = state;
-        state = 8;
-      } 
+      if (enterIR.isnt_broken() && nestIR.isnt_broken()) {
+        state = previous_state;
+      }
 
       break;
 
     case 8: // Trial_ended
       
       
+      // Close the door and retract the monster
+      slow_close();
+      
+      if (enterIR.is_broken()) { // dont finish up trial if they are on the wrong side of the doo once it closes
+        state = previous_state;
+        break;
+      }
+
+
       start_alignment.align_offset();
       threat_trigger_alignment.align_offset();
       
-      // Close the door and retract the monster
-      slow_close();
 
       // Report this
       Serial.println("# Trial has ended");
