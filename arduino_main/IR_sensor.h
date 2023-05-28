@@ -8,6 +8,8 @@ class IR_sensor {
     IR_sensor(int pin); // constructor
     bool is_broken();
     bool isnt_broken();
+    bool is_rising();
+    bool is_falling(); 
   private:
     int _pin;
 };
