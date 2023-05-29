@@ -63,7 +63,7 @@ lick_sensor lick(7);                      // D7
 alignment threat_trigger_alignment(10);   // D10 ~
 alignment lick_reward_alignment(11);      // D11 ~
 alignment start_alignment(12);            // D12
-                                          // D13
+IR_sensor deepnestIR(13);                 // D13
 
 //_______________Void Setup_____________________
 
@@ -128,6 +128,8 @@ void setup() {
   }
  
   state = 1;
+  start_alignment.align_onset();
+  start_time = millis();
 }
 
 //_______________Void Loop_____________________
@@ -139,53 +141,59 @@ void loop() {
   switch (state) {
     
     case 1: // Trial Begun
-
+      
       fast_open();
-      start_alignment.align_onset();
-      start_time = millis();
       
       // Check for state switching events
       if (enterIR.is_broken()) {
         previous_state = state;
         state = 2;
         lcd_write("Mouse going out");
+        break;
       }
-      if (threatIR.is_broken()) {
-        previous_state = state; // mouse ran past the enter IR
+      if (threatIR.is_broken()) { // Mouse ran past the enterIR
+        previous_state = state;
         state = 3;
         lcd_write("Mouse entered");
         trial[current_trial].mouse_entered = true;
         trial[current_trial].latency_to_enter = millis() - start_time;
+        break;
       }
       if ((millis() - start_time) > enter_time_limit) {
         previous_state = state;
         state = 8;
         lcd_write("Trial ended");
+        break;
       }
 
       break; 
     
     case 2: // Mouse going out
-      if (enterIR.is_broken() && nestIR.is_broken()) {}       // sticking around in the door
-      if (enterIR.is_broken() && nestIR.isnt_broken()) {      // has actually entered
-        previous_state = state;
-        state = 3;
-        lcd_write("Mouse Entered");
-        trial[current_trial].mouse_entered = true;
-        trial[current_trial].latency_to_enter = millis() - start_time;
+      if (nestIR.is_broken()) {                              // sticking around with butt on inside of door
+        break;
       }
-      if (enterIR.isnt_broken() && nestIR.is_broken()) {      // nose out and right back in
+      if (deepnestIR.is_broken()) {                          // back into the nest fully
         previous_state = state;
         state = 1;
-        lcd_write("Mouse went back");
+        break;
       }
-      if (enterIR.isnt_broken() && nestIR.isnt_broken()) {    //  ran ahead and entered
+      if (enterIR.is_broken() && nestIR.isnt_broken()) {     // has actually entered
         previous_state = state;
         state = 3;
         lcd_write("Mouse Entered");
         trial[current_trial].mouse_entered = true;
         trial[current_trial].latency_to_enter = millis() - start_time;
+        break;
       }
+      if (threatIR.is_broken()) { // Mouse ran past the enterIR
+        previous_state = state;
+        state = 3;
+        lcd_write("Mouse entered");
+        trial[current_trial].mouse_entered = true;
+        trial[current_trial].latency_to_enter = millis() - start_time;
+        break;
+      }
+      
 
       break;
 
@@ -201,11 +209,19 @@ void loop() {
         threat_trigger_alignment.align_onset();
         digitalWrite(threat_trigger_pin, monster_qm);
         digitalWrite(sound_trigger_pin, sound_qm);
+        break;
       }
       if (nestIR.is_broken()) {
         previous_state = state;
         state = 7;
         lcd_write("Mouse going in");
+        break;
+      }
+      if (deepnestIR.is_broken()) {
+        previous_state = state;
+        state = 8;
+        lcd_write("Mouse fully entered");
+        break;
       }
       
       break;
@@ -226,6 +242,12 @@ void loop() {
         previous_state = state;
         state = 7;
         lcd_write("Mouse going in");
+      }
+      if (deepnestIR.is_broken()) {
+        previous_state = state;
+        state = 8;
+        lcd_write("Mouse fully entered");
+        break;
       }
       
       break;
@@ -249,20 +271,33 @@ void loop() {
         state = 7;
         lcd_write("Mouse going in");
       }
+      if (deepnestIR.is_broken()) {
+        previous_state = state;
+        state = 8;
+        lcd_write("Mouse fully entered");
+        break;
+      }
 
       break;
 
     case 7: // mouse going in
-      if (enterIR.is_broken() && nestIR.is_broken()) {}       // lingering upon re-entry
+      if (enterIR.is_broken()) {                              // lingering upon re-entry with butt in main chamber
+        break;
+      }       
+      if (deepnestIR.is_broken()) {
+        previous_state = state;
+        state = 8;
+        lcd_write("Mouse fully entered");
+        break;
+      }
       if (enterIR.isnt_broken() && nestIR.is_broken()) {      // has actually returned
         previous_state = state;
         state = 8;
+        break;
       }
-      if (enterIR.is_broken() && nestIR.isnt_broken()) {      // changed mind didnt re-enter
+      if (deepnestIR.isnt_broken() && nestIR.isnt_broken()) {
         state = previous_state;
-      } 
-      if (enterIR.isnt_broken() && nestIR.isnt_broken()) {
-        state = previous_state;
+        break;
       }
 
       break;
@@ -273,15 +308,22 @@ void loop() {
       // Close the door and retract the monster
       slow_close();
       
-      if (enterIR.is_broken()) { // dont finish up trial if they are on the wrong side of the doo once it closes
-        state = previous_state;
-        break;
+      // dont finish up trial if they are on the wrong side of the door once it closes
+      for (int i = 0, i < 20, i++) {
+        if (enterIR.is_broken()) { 
+          slow_open();
+          state = previous_state;
+          break;
+        }
+        if (threatIR.is_broken()) {
+          slow_open();
+          state = previous_state;
+          break;
+        }
       }
-
 
       start_alignment.align_offset();
       threat_trigger_alignment.align_offset();
-      
 
       // Report this
       Serial.println("# Trial has ended");
@@ -304,7 +346,7 @@ void loop() {
       digitalWrite(threat_trigger_pin, LOW);
       digitalWrite(sound_trigger_pin, LOW);
 
-      lcd_write("Finished trial" + String(current_trial));
+      lcd_write("Finished trial " + String(current_trial));
 
       // Wait for the intertrial interval
       delay(intertrial_interval);
@@ -312,7 +354,8 @@ void loop() {
       //Move on to next trial
       current_trial += 1;
       state = 1;
-
+      start_alignment.align_onset();
+      start_time = millis();
       lcd_write("Trial Begun");
 
       break;
@@ -339,7 +382,7 @@ void fast_close() {
 void slow_open() {
   for (int pos = door_closed_pos; pos >= door_open_pos; pos -= 1) {
     doorServo.write(pos);             
-    delay(15);                       
+    delay(10);                       
   }
 }
 
