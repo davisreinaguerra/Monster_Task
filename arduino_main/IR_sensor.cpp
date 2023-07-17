@@ -6,7 +6,7 @@ bool last_state;
 
 // constructor
 IR_sensor::IR_sensor(int pin) {
-  pinMode(pin, INPUT);
+  pinMode(pin, INPUT_PULLUP);
   _pin = pin;
 }
 
