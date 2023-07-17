@@ -1,0 +1,100 @@
+# Trial has ended
+Trial = 1
+trial_duration = 15258
+latency_to_enter = 7138
+latency_to_trigger = 14271
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 1
+port_licked = 0
+# Trial has ended
+Trial = 2
+trial_duration = 9023
+latency_to_enter = 8035
+latency_to_trigger = 0
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 0
+port_licked = 0
+# Trial has ended
+Trial = 3
+trial_duration = 4767
+latency_to_enter = 3781
+latency_to_trigger = 0
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 0
+port_licked = 0
+# Trial has ended
+Trial = 4
+trial_duration = 37092
+latency_to_enter = 16053
+latency_to_trigger = 36105
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 1
+port_licked = 0
+# Trial has ended
+Trial = 5
+trial_duration = 109146
+latency_to_enter = 36482
+latency_to_trigger = 39322
+latency_to_lick = 39343
+escape_duration = 68816
+mouse_entered = 1
+threat_triggered = 1
+port_licked = 1
+# Trial has ended
+Trial = 6
+trial_duration = 2988
+latency_to_enter = 2001
+latency_to_trigger = 0
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 0
+port_licked = 0
+# Trial has ended
+Trial = 7
+trial_duration = 98540
+latency_to_enter = 93497
+latency_to_trigger = 97553
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 1
+port_licked = 0
+# Trial has ended
+Trial = 8
+trial_duration = 60987
+latency_to_enter = 0
+latency_to_trigger = 0
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 0
+threat_triggered = 0
+port_licked = 0
+# Trial has ended
+Trial = 9
+trial_duration = 60988
+latency_to_enter = 0
+latency_to_trigger = 0
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 0
+threat_triggered = 0
+port_licked = 0
+# Trial has ended
+Trial = 10
+trial_duration = 28124
+latency_to_enter = 27137
+latency_to_trigger = 0
+latency_to_lick = 0
+escape_duration = 0
+mouse_entered = 1
+threat_triggered = 0
+port_licked = 0
