@@ -82,24 +82,28 @@ classdef monsterapp < matlab.apps.AppBase
         function reward_volume_enter(app, event)
             value = app.RewardVolumeEditField.Value;
             app.reward_volume = value;
+            assignin("base", "reward_volume", app.reward_volume);
         end
 
         % Value changed function: EnterTimeLimitEditField
         function enter_time_limit_enter(app, event)
             value = app.EnterTimeLimitEditField.Value;
             app.enter_time_limit = value * 1000;
+            assignin("base", "enter_time_limit", app.enter_time_limit);
         end
 
         % Value changed function: IntertrialIntervalEditField
         function intertrial_interval_enter(app, event)
             value = app.IntertrialIntervalEditField.Value;
             app.intertrial_interval = value * 1000;
+            assignin("base", "intertrial_interval", app.intertrial_interval);
         end
 
         % Value changed function: NumberofTrialsEditField
         function n_trials_enter(app, event)
             value = app.NumberofTrialsEditField.Value;
             app.n_trials = value;
+            assignin("base", "n_trials", app.n_trials);
         end
 
 
