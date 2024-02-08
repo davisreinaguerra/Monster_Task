@@ -24,8 +24,8 @@ classdef monsterapp < matlab.apps.AppBase
         DateEditFieldLabel                  matlab.ui.control.Label
         AnimalCodeEditField                 matlab.ui.control.EditField
         AnimalCodeEditFieldLabel            matlab.ui.control.Label
-        DayDropDown                         matlab.ui.control.DropDown
-        DayDropDownLabel                    matlab.ui.control.Label
+        DayEditField                        matlab.ui.control.EditField
+        DayEditFieldLabel                   matlab.ui.control.Label
         
         
         %Variables
@@ -121,8 +121,8 @@ classdef monsterapp < matlab.apps.AppBase
             assignin("base", "animal_code_handle", app.animal_code);
         end
 
-        function day_select(app, event)
-            value = app.DayDropDown.Value;
+        function day_enter(app, event)
+            value = app.DayEditField.Value;
             app.day = value;
             assignin("base", "day_handle", app.day);
         end
@@ -145,19 +145,18 @@ classdef monsterapp < matlab.apps.AppBase
             app.UIFigure.Name = 'MATLAB App';
 
 
-            % Create DayDropDownLabel
-            app.DayDropDownLabel = uilabel(app.UIFigure);
-            app.DayDropDownLabel.HorizontalAlignment = 'right';
-            app.DayDropDownLabel.FontSize = 18;
-            app.DayDropDownLabel.Position = [25 430 142 23];
-            app.DayDropDownLabel.Text = 'Day';
+            % Create DayEditFieldLabel
+            app.DayEditFieldLabel = uilabel(app.UIFigure);
+            app.DayEditFieldLabel.HorizontalAlignment = 'right';
+            app.DayEditFieldLabel.FontSize = 18;
+            app.DayEditFieldLabel.Position = [25 430 142 23];
+            app.DayEditFieldLabel.Text = 'Day';
 
-            % Create DayDropDown
-            app.DayDropDown = uidropdown(app.UIFigure);
-            app.DayDropDown.Items = {'Training1', 'Training2', 'Training3', 'NoMonster1', 'Monster2', 'NoMonster3', 'Monster4', 'NoMonster5', 'Monster6', 'NoMonster7'};
-            app.DayDropDown.ValueChangedFcn = createCallbackFcn(app, @day_select, true);
-            app.DayDropDown.Position = [186 430 200 22];
-            app.DayDropDown.Value = 'Training1';
+            % Create DayEditField
+            app.DayEditField = uieditfield(app.UIFigure, 'text');
+            app.DayEditField.ValueChangedFcn = createCallbackFcn(app, @day_enter, true);
+            app.DayEditField.Placeholder = 'Training/Monster#';
+            app.DayEditField.Position = [186 430 200 22];
             
 
             % Create AnimalCodeEditFieldLabel
