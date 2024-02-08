@@ -183,7 +183,7 @@ classdef monsterapp < matlab.apps.AppBase
             % Create DateEditField
             app.DateEditField = uieditfield(app.UIFigure, 'text');
             app.DateEditField.ValueChangedFcn = createCallbackFcn(app, @date_enter, true);
-            app.DateEditField.Placeholder = 'Day_Month_Year';
+            app.DateEditField.Placeholder = 'Month_Day_Year';
             app.DateEditField.Position = [186 370 200 22];
 
             %______________________Numeric Edit Fields ___________________
